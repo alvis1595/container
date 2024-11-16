@@ -11,8 +11,8 @@
     image: "{{ cadvisor_image }}:{{ cadvisor_version }}"
     state: started
     privileged: "{{ cadvisor_privileged }}"
-    ports: "{{ items.cadvisor_ports }}"
-    volumes: "{{ items.cadvisor_volumes }}"
+    ports: "{{ item.cadvisor_ports }}"
+    volumes: "{{ item.cadvisor_volumes }}"
     restart_policy: "{{ cadvisor_restart_policy }}"
     with_items:
       - "{{ cadvisor_ports }}"
