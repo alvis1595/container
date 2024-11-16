@@ -1,0 +1,6 @@
+---
+- name: despl cont
+  hosts: all
+  become: true
+  roles:
+    - role: 'roles/createcontainer'
