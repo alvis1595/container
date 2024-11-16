@@ -4,13 +4,16 @@
     name: "{{ cadvisor_image }}"
     tag: "{{ cadvisor_version }}"
     state: present
-    
+
 - name: Create and run the cAdvisor container
   containers.podman.podman_container:
     name: "{{ cadvisor_container_name }}"
     image: "{{ cadvisor_image }}:{{ cadvisor_version }}"
     state: started
     privileged: "{{ cadvisor_privileged }}"
-    ports: "{{ cadvisor_ports }}"
-    volumes: "{{ cadvisor_volumes }}"
+    ports: "{{ items.cadvisor_ports }}"
+    volumes: "{{ items.cadvisor_volumes }}"
     restart_policy: "{{ cadvisor_restart_policy }}"
+    with_items:
+      - "{{ cadvisor_ports }}"
+      - "{{ cadvisor_volumes }}"
