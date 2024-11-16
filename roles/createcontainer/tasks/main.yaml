@@ -12,10 +12,10 @@
     state: started
     privileged: "{{ cadvisor_privileged }}"
     ports: 
-      - "{{ item.cadvisor_ports }}"
+      - "{{ item.0 }}"
     volumes: 
-      - "{{ item.cadvisor_volumes }}"
+      - "{{ item.1 }}"
     restart_policy: "{{ cadvisor_restart_policy }}"
-  loop:
-    - "{{ cadvisor_ports }}"
-    - "{{ cadvisor_volumes }}"
+  loop: "{{ cadvisor_ports | zip(cadvisor_volumes) | list }}"
+  loop_control:
+    label: "{{ item.0 }}"
