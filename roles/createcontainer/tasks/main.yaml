@@ -5,15 +5,28 @@
     tag: "{{ cadvisor_version }}"
     state: present
 
-- name: Create the cAdvisor container with ports and volumes
+- name: Create the cAdvisor container
   containers.podman.podman_container:
     name: "{{ cadvisor_container_name }}"
     image: "{{ cadvisor_image }}:{{ cadvisor_version }}"
     state: started
     privileged: "{{ cadvisor_privileged }}"
-    ports: "{{ item.ports | default(omit) }}"
-    volumes: "{{ item.volumes | default(omit) }}"
     restart_policy: "{{ cadvisor_restart_policy }}"
-  loop: 
-  - "{{ ports }}"
-  - "{{ volumes }}"
+    detach: true
+  register: cadvisor_containe
+
+- name: Add ports to cAdvisor container
+  containers.podman.podman_container:
+    name: "{{ cadvisor_container_name }}"
+    ports:
+      - "{{ item }}"
+  with_items: "{{ cadvisor_ports }}"
+  when: cadvisor_container is not faile
+  
+- name: Add volumes to cAdvisor container
+  containers.podman.podman_container:
+    name: "{{ cadvisor_container_name }}"
+    volumes:
+      - "{{ item }}"
+  with_items: "{{ cadvisor_volumes }}"
+  when: cadvisor_container is not failed
