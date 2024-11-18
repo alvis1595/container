@@ -11,22 +11,6 @@
     image: "{{ cadvisor_image }}:{{ cadvisor_version }}"
     state: started
     privileged: "{{ cadvisor_privileged }}"
+    ports: "{{ cadvisor_ports }}"
+    volumes: "{{ cadvisor_volumes }}"
     restart_policy: "{{ cadvisor_restart_policy }}"
-    detach: true
-  register: cadvisor_container
-
-- name: Add ports to cAdvisor container
-  containers.podman.podman_container:
-    name: "{{ cadvisor_container_name }}"
-    ports:
-      - "{{ item }}"
-  with_items: "{{ cadvisor_ports }}"
-  when: cadvisor_container.container.State.Status == "running"
-
-- name: Add volumes to cAdvisor container
-  containers.podman.podman_container:
-    name: "{{ cadvisor_container_name }}"
-    volumes:
-      - "{{ item }}"
-  with_items: "{{ cadvisor_volumes }}"
-  when: cadvisor_container.container.State.Status == "running"
