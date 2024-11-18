@@ -5,17 +5,20 @@
     tag: "{{ cadvisor_version }}"
     state: present
 
-- name: Create and run the cAdvisor container
-  containers.podman.podman_container:
-    name: "{{ cadvisor_container_name }}"
-    image: "{{ cadvisor_image }}:{{ cadvisor_version }}"
-    state: started
-    privileged: "{{ cadvisor_privileged }}"
-    ports: 
-      - "{{ item.0 }}"
-    volumes: 
-      - "{{ item.1 }}"
-    restart_policy: "{{ cadvisor_restart_policy }}"
-  loop: "{{ cadvisor_ports | zip(cadvisor_volumes) | list }}"
-  loop_control:
-    label: "{{ item.0 }}"
+- name: Create the cAdvisor container with ports and volumes
+containers.podman.podman_container:
+  name: "{{ cadvisor_container_name }}"
+  image: "{{ cadvisor_image }}:{{ cadvisor_version }}"
+  state: started
+  privileged: "{{ cadvisor_privileged }}"
+  ports: "{{ item.ports | default(omit) }}"
+  volumes: "{{ item.volumes | default(omit) }}"
+  restart_policy: "{{ cadvisor_restart_policy }}"
+loop: 
+  - { ports: "8203:8080" }
+  - { ports: "8300:9090" }
+  - { volumes: "/:/rootfs:ro" }
+  - { volumes: "/sys:/sys:ro" }
+  - { volumes: "/var/run:/var/run:rw" }
+  - { volumes: "/var/lib/docker/:/var/lib/docker:ro" }
+  - { volumes: "/run/podman:/run/podman:rw" }
