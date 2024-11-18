@@ -13,7 +13,7 @@
     privileged: "{{ cadvisor_privileged }}"
     restart_policy: "{{ cadvisor_restart_policy }}"
     detach: true
-  register: cadvisor_containe
+  register: cadvisor_container
 
 - name: Add ports to cAdvisor container
   containers.podman.podman_container:
