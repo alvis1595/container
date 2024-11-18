@@ -6,15 +6,15 @@
     state: present
 
 - name: Create the cAdvisor container with ports and volumes
-containers.podman.podman_container:
-  name: "{{ cadvisor_container_name }}"
-  image: "{{ cadvisor_image }}:{{ cadvisor_version }}"
-  state: started
-  privileged: "{{ cadvisor_privileged }}"
-  ports: "{{ item.ports | default(omit) }}"
-  volumes: "{{ item.volumes | default(omit) }}"
-  restart_policy: "{{ cadvisor_restart_policy }}"
-loop: 
+  containers.podman.podman_container:
+    name: "{{ cadvisor_container_name }}"
+    image: "{{ cadvisor_image }}:{{ cadvisor_version }}"
+    state: started
+    privileged: "{{ cadvisor_privileged }}"
+    ports: "{{ item.ports | default(omit) }}"
+    volumes: "{{ item.volumes | default(omit) }}"
+    restart_policy: "{{ cadvisor_restart_policy }}"
+  loop: 
   - { ports: "8203:8080" }
   - { ports: "8300:9090" }
   - { volumes: "/:/rootfs:ro" }
