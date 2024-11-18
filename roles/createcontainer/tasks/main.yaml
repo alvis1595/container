@@ -21,8 +21,8 @@
     ports:
       - "{{ item }}"
   with_items: "{{ cadvisor_ports }}"
-  when: cadvisor_container is not faile
-  
+  when: cadvisor_container is not failed
+
 - name: Add volumes to cAdvisor container
   containers.podman.podman_container:
     name: "{{ cadvisor_container_name }}"
