@@ -15,10 +15,5 @@
     volumes: "{{ item.volumes | default(omit) }}"
     restart_policy: "{{ cadvisor_restart_policy }}"
   loop: 
-  - { ports: "8203:8080" }
-  - { ports: "8300:9090" }
-  - { volumes: "/:/rootfs:ro" }
-  - { volumes: "/sys:/sys:ro" }
-  - { volumes: "/var/run:/var/run:rw" }
-  - { volumes: "/var/lib/docker/:/var/lib/docker:ro" }
-  - { volumes: "/run/podman:/run/podman:rw" }
+  - "{{ ports }}"
+  - "{{ volumes }}"
