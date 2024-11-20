@@ -2,7 +2,6 @@
   - name: Obtener lista de contenedores
     containers.podman.podman_container_info:
       executable: podman
-      containers: all
     register: podman_containers
 
   - name: Recoger información de contenedores
@@ -12,7 +11,7 @@
   - name: Procesar información para extraer datos relevantes
     set_fact:
       containers: "{{ result.stdout_lines | map('from_json') }}"
-      
+
   - name: Mostrar nombre y estado de los contenedores
     debug:
       msg:
