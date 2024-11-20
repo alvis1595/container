@@ -7,13 +7,13 @@
   - name: Depurar variable podman_containers
     debug:
       var: podman_containers    
-      
+
   - name: Mostrar lista de contenedores
     debug:
       msg:
-        Nombre: "{{ item.containers.Name }}"
-        Estado: "{{ item.containers.State.Status }}"
-    loop: "{{ podman_containers }}"
+        - "Nombre: {{ item.Name }}"
+        - "Estado: {{ item.State.Status }}"
+    loop: "{{ podman_containers.containers }}"
 
 
   - name: Reiniciar contenedores que no estén en estado running
