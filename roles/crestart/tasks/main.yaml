@@ -5,7 +5,7 @@
     register: podman_containers
 
   - name: Recoger información de contenedores
-    command: podman ps --format "{{ json . }}"
+    command: podman ps --format "{{{{ json . }}}}"
     register: result
 
   - name: Procesar información para extraer datos relevantes
