@@ -3,7 +3,11 @@
     containers.podman.podman_container_info:
       executable: podman
     register: podman_containers
-    
+
+  - name: Depurar variable podman_containers
+    debug:
+      var: podman_containers    
+      
   - name: Mostrar lista de contenedores
     debug:
       msg:
