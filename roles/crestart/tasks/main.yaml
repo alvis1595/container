@@ -1,9 +1,9 @@
 ---
   - name: Obtener lista de contenedores
     containers.podman.podman_container_info:
-      all: true
+      executable: podman
     register: podman_containers
-    
+
   - name: Reiniciar contenedores que no estén en estado running
     containers.podman.podman_container:
       name: "{{ item.Name }}"
