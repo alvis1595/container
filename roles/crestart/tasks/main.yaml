@@ -5,19 +5,20 @@
       containers: all
     register: podman_containers
 
-  - name: Depurar variable podman_containers
-    debug:
-      var: podman_containers    
+  - name: Recoger información de contenedores
+    command: podman ps --format "{{ json . }}"
+    register: result
 
-  - name: Mostrar lista de contenedores
+  - name: Procesar información para extraer datos relevantes
+    set_fact:
+      containers: "{{ result.stdout_lines | map('from_json') }}"
+      
+  - name: Mostrar nombre y estado de los contenedores
     debug:
       msg:
-        - "Nombre: {{ item.Name }}"
-        - "Estado: {{ item.State.Status }}"
-    loop: "{{ podman_containers.containers }}"
-    loop_control:
-      label: "{{ item.Name }}"
-
+        Nombre: "{{ item.Names }}"
+        Estado: "{{ item.State }}"
+    loop: "{{ containers }}"
 
   - name: Reiniciar contenedores que no estén en estado running
     containers.podman.podman_container:
