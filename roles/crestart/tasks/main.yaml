@@ -1,0 +1,14 @@
+---
+  - name: Obtener lista de contenedores
+    containers.podman.podman_container_info:
+      all: true
+    register: podman_containers
+    
+  - name: Reiniciar contenedores que no estén en estado running
+    containers.podman.podman_container:
+      name: "{{ item.Name }}"
+      state: started
+    with_items: "{{ podman_containers.containers }}"
+    when: item.State.Running is not defined or not item.State.Running
+    loop_control:
+      label: "{{ item.Name }}"
