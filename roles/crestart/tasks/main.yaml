@@ -6,7 +6,7 @@
     
   - name: Mostrar lista de contenedores
     debug:
-      msg: "Contenedor: {{ item.Name }}, Estado: {{ item.State }}"
+      msg: "Contenedor: {{ item.Name }}, Estado: {{ item.State.Status }}"
     with_items: "{{ podman_containers.containers }}"
 
   - name: Reiniciar contenedores que no estén en estado running
