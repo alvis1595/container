@@ -2,6 +2,7 @@
   - name: Obtener lista de contenedores
     containers.podman.podman_container_info:
       executable: podman
+      containers: all
     register: podman_containers
 
   - name: Depurar variable podman_containers
