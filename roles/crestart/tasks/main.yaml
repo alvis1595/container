@@ -15,7 +15,7 @@
         - "Estado: {{ item.State.Status }}"
     loop: "{{ podman_containers.containers }}"
     loop_control:
-    label: "{{ item.Name }}"
+      label: "{{ item.Name }}"
 
 
   - name: Reiniciar contenedores que no estén en estado running
