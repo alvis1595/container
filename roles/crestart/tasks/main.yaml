@@ -9,7 +9,8 @@
       msg:
         Nombre: "{{ item.Name }}"
         Estado: "{{ item.State.Status }}"
-    with_items: "{{ podman_containers.containers }}"
+    loop: "{{ podman_containers.containers }}"
+
 
   - name: Reiniciar contenedores que no estén en estado running
     containers.podman.podman_container:
