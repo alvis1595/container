@@ -29,16 +29,16 @@
         msg: "Código de retorno de Docker: '{{ docker_check.rc }}'"
 
     - name: Establecer gestor de contenedores
-    set_fact:
-      container_manager: >
-        {% if podman_check.stdout | regex_replace('\s+', '') == '/usr/bin/podman' %}
-          podman
-        {% elif docker_check.stdout | regex_replace('\s+', '') == '/usr/bin/docker' %}
-          docker
-        {% else %}
-          none
-        {% endif %}
-        
+      set_fact:
+        container_manager: >
+          {% if podman_check.stdout | regex_replace('\s+', '') == '/usr/bin/podman' %}
+            podman
+          {% elif docker_check.stdout | regex_replace('\s+', '') == '/usr/bin/docker' %}
+            docker
+          {% else %}
+            none
+          {% endif %}
+
     - name: Mostrar gestor de contenedores detectado
       debug:
         msg: "El gestor de contenedores detectado es: '{{ container_manager }}'"
