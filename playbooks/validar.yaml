@@ -28,7 +28,7 @@
         msg: "No se encontró Podman ni Docker en este servidor."
       when: container_manager == 'none'
 
-- name: Ejecutar rol de Docker
-  include_role:
-    name: docker
-  when: container_manager == 'docker'
+    - name: Ejecutar rol de Docker
+      include_role:
+        name: docker
+      when: container_manager == 'docker'
