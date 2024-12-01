@@ -23,9 +23,9 @@
     - name: Establecer gestor de contenedores
       set_fact:
         container_manager: >
-          {% if podman_check.stdout | trim | length > 0 %}
+          {% if podman_check.stdout | trim == '/usr/bin/podman' %}
             podman
-          {% elif docker_check.stdout | trim | length > 0 %}
+          {% elif docker_check.stdout | trim == '/usr/bin/docker' %}
             docker
           {% else %}
             none
