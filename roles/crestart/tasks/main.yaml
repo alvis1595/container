@@ -4,21 +4,6 @@
       executable: podman
     register: podman_containers
 
-  - name: Recoger información de contenedores
-    command: podman ps --format "{{{{ json . }}}}"
-    register: result
-
-  - name: Procesar información para extraer datos relevantes
-    set_fact:
-      containers: "{{ result.stdout_lines | map('from_json') }}"
-
-  - name: Mostrar nombre y estado de los contenedores
-    debug:
-      msg:
-        Nombre: "{{ item.Names }}"
-        Estado: "{{ item.State }}"
-    loop: "{{ containers }}"
-
   - name: Reiniciar contenedores que no estén en estado running
     containers.podman.podman_container:
       name: "{{ item.Name }}"
