@@ -5,11 +5,13 @@
     - name: Verificar si Podman está instalado
       command: which podman
       register: podman_check
+      changed_when: false
       failed_when: false
 
     - name: Verificar si Docker está instalado
       command: which docker
       register: docker_check
+      changed_when: false
       failed_when: false
 
     - name: Mostrar resultado de la verificación de Podman
@@ -38,6 +40,9 @@
           {% else %}
             none
           {% endif %}
+    - name: Mostrar gestor de contenedores limpio
+      debug:
+        msg: "El gestor de contenedores detectado es: '{{ container_manager | regex_replace('^\\s+|\\s+$', '') }}'"
 
     - name: Mostrar gestor de contenedores detectado
       debug:
