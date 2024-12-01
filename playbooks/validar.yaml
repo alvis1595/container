@@ -1,0 +1,34 @@
+---
+- name: Gestionar contenedores
+  hosts: all
+  tasks:
+    - name: Verificar si Podman está instalado
+      command: which podman
+      register: podman_check
+      failed_when: false
+
+    - name: Verificar si Docker está instalado
+      command: which docker
+      register: docker_check
+      failed_when: false
+
+    - name: Establecer gestor de contenedores
+      set_fact:
+        container_manager: >
+          {% if podman_check.rc == 0 %}
+            podman
+          {% elif docker_check.rc == 0 %}
+            docker
+          {% else %}
+            none
+          {% endif %}
+
+    - name: Validar si se encontró un gestor de contenedores
+      fail:
+        msg: "No se encontró Podman ni Docker en este servidor."
+      when: container_manager == 'none'
+
+- name: Ejecutar rol de Docker
+  import_role:
+    name: docker
+  when: container_manager == 'docker'
