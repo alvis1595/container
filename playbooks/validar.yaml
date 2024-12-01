@@ -14,11 +14,19 @@
 
     - name: Mostrar resultado de la verificación de Podman
       debug:
-        msg: "Resultado de Podman: '{{ podman_check.stdout | trim }}'"
+        msg: "Resultado de Podman (stdout): '{{ podman_check.stdout }}'"
 
     - name: Mostrar resultado de la verificación de Docker
       debug:
-        msg: "Resultado de Docker: '{{ docker_check.stdout | trim }}'"
+        msg: "Resultado de Docker (stdout): '{{ docker_check.stdout }}'"
+
+    - name: Mostrar código de retorno de Podman
+      debug:
+        msg: "Código de retorno de Podman: '{{ podman_check.rc }}'"
+
+    - name: Mostrar código de retorno de Docker
+      debug:
+        msg: "Código de retorno de Docker: '{{ docker_check.rc }}'"
 
     - name: Establecer gestor de contenedores
       set_fact:
@@ -30,10 +38,20 @@
           {% else %}
             none
           {% endif %}
+
+    - name: Mostrar gestor de contenedores detectado
+      debug:
+        msg: "El gestor de contenedores detectado es: '{{ container_manager }}'"
+
     - name: Validar si se encontró un gestor de contenedores
       fail:
         msg: "No se encontró Podman ni Docker en este servidor."
       when: container_manager == 'none'
+
+    - name: Ejecutar rol de Podman
+      include_role:
+        name: podman
+      when: container_manager == 'podman'
 
     - name: Ejecutar rol de Docker
       include_role:
