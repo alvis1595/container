@@ -12,12 +12,20 @@
       register: docker_check
       failed_when: false
 
+    - name: Mostrar resultado de la verificación de Podman
+      debug:
+        msg: "Resultado de Podman: {{ podman_check.stdout }}"
+
+    - name: Mostrar resultado de la verificación de Docker
+      debug:
+        msg: "Resultado de Docker: {{ docker_check.stdout }}"
+
     - name: Establecer gestor de contenedores
       set_fact:
         container_manager: >
-          {% if podman_check.rc == 0 %}
+          {% if podman_check.stdout | trim | length > 0 %}
             podman
-          {% elif docker_check.rc == 0 %}
+          {% elif docker_check.stdout | trim | length > 0 %}
             docker
           {% else %}
             none
