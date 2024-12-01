@@ -14,23 +14,22 @@
 
     - name: Mostrar resultado de la verificación de Podman
       debug:
-        msg: "Resultado de Podman: '{{ podman_check.stdout | strip }}'"
+        msg: "Resultado de Podman: '{{ podman_check.stdout | trim }}'"
 
     - name: Mostrar resultado de la verificación de Docker
       debug:
-        msg: "Resultado de Docker: '{{ docker_check.stdout | strip }}'"
+        msg: "Resultado de Docker: '{{ docker_check.stdout | trim }}'"
 
     - name: Establecer gestor de contenedores
       set_fact:
         container_manager: >
-          {% if podman_check.stdout | strip == '/usr/bin/podman' %}
+          {% if podman_check.stdout | trim == '/usr/bin/podman' %}
             podman
-          {% elif docker_check.stdout | strip == '/usr/bin/docker' %}
+          {% elif docker_check.stdout | trim == '/usr/bin/docker' %}
             docker
           {% else %}
             none
           {% endif %}
-
     - name: Validar si se encontró un gestor de contenedores
       fail:
         msg: "No se encontró Podman ni Docker en este servidor."
