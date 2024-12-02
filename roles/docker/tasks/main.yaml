@@ -1,13 +1,13 @@
 ---
-- name: Obtener lista de contenedores (Docker)
-  community.docker.docker_container_info:
-    executable: docker
-  register: docker_containers
-
-- name: Reiniciar contenedores que no estén en estado running (Docker)
-  community.docker.docker_container:
-    name: "{{ item.Name }}"
-    state: started
-  loop: "{{ docker_containers.containers | selectattr('State.Running', '!=', True) | list }}"
-  loop_control:
-    label: "{{ item.Name }}"
+  - name: Obtener lista de contenedores (Docker)
+    community.docker.docker_container_info:
+      executable: docker
+    register: docker_containers
+  
+  - name: Reiniciar contenedores que no estén en estado running (Docker)
+    community.docker.docker_container:
+      name: "{{ item.Name }}"
+      state: started
+    loop: "{{ docker_containers.containers | selectattr('State.Running', '!=', True) | list }}"
+    loop_control:
+      label: "{{ item.Name }}"
