@@ -16,7 +16,7 @@
     community.docker.docker_container:
       name: "{{ item.Name | regex_replace('^/', '') }}"  # Quitar el prefijo '/'
       state: started
-    loop: "{{ docker_containers | selectattr('State.Running', 'eq', false) | list }}"
+    loop: "{{ container_info | selectattr('State.Running', 'eq', false) | list }}"
     loop_control:
       label: "{{ item.Name | regex_replace('^/', '') }}"  # Mostrar nombres sin prefijo
-    when: docker_containers | length > 0  # Asegurar que haya contenedores
+    when: container_info | length > 0  # Asegurar que haya contenedores
