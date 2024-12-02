@@ -1,22 +1,17 @@
 ---
-  - name: Obtener lista de IDs de contenedores
-    ansible.builtin.command: docker ps -a -q
-    register: container_ids
-
-  - name: Obtener información de cada contenedor
-    ansible.builtin.command: docker inspect {{ item }}
-    loop: "{{ container_ids.stdout_lines }}"
-    register: container_info
-
-  - name: Mostrar información de los contenedores inspeccionados
-    debug:
-      var: container_info.results
-
+  - name: Obtener información de contenedores detenidos
+    ansible.builtin.command: docker inspect $(docker ps -aq)
+    register: docker_containers_raw
+  
+  - name: Parsear datos de contenedores
+    set_fact:
+      docker_containers: "{{ docker_containers_raw.stdout | from_json }}"
+  
   - name: Reiniciar contenedores que no están en estado running (Docker)
     community.docker.docker_container:
-      name: "{{ item.Name | regex_replace('^/', '') }}"  # Quitar el prefijo '/'
+      name: "{{ item.Name | regex_replace('^/', '') }}"
       state: started
-    loop: "{{ container_info | selectattr('State.Running', 'eq', false) | list }}"
+    loop: "{{ docker_containers | selectattr('State.Running', 'eq', false) | list }}"
     loop_control:
-      label: "{{ item.Name | regex_replace('^/', '') }}"  # Mostrar nombres sin prefijo
-    when: container_info | length > 0  # Asegurar que haya contenedores
+      label: "{{ item.Name | regex_replace('^/', '') }}"
+    when: docker_containers | length > 0
