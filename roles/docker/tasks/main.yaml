@@ -1,9 +1,17 @@
 ---
-  - name: Consultar información de todos los contenedores
-    community.docker.docker_container:
-      state: query
+  - name: Obtener lista de IDs de contenedores
+    ansible.builtin.command: docker ps -q
+    register: container_ids
+  
+  - name: Obtener información de contenedores específicos
+    community.docker.docker_container_info:
+      name: "{{ item }}"
+    loop: "{{ container_ids.stdout_lines }}"
     register: container_info
-
+  
+  - name: Mostrar información de los contenedores
+    debug:
+      var: container_info.results
 
   - name: Reiniciar contenedores que no estén en estado running (Docker)
     community.docker.docker_container:
