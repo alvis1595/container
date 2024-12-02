@@ -2,14 +2,13 @@
   - name: Obtener lista de IDs de contenedores
     ansible.builtin.command: docker ps -q
     register: container_ids
-  
-  - name: Obtener información de contenedores específicos
-    community.docker.docker_container_info:
-      name: "{{ item }}"
+
+  - name: Obtener información de cada contenedor
+    ansible.builtin.command: docker inspect {{ item }}
     loop: "{{ container_ids.stdout_lines }}"
     register: container_info
   
-  - name: Mostrar información de los contenedores
+  - name: Mostrar información de los contenedores inspeccionados
     debug:
       var: container_info.results
 
