@@ -1,9 +1,10 @@
 ---
-  - name: Obtener lista de contenedores (Docker)
-    community.docker.docker_container_info:
-      executable: docker
-    register: docker_containers
-  
+  - name: Consultar información de todos los contenedores
+    community.docker.docker_container:
+      state: query
+    register: container_info
+
+
   - name: Reiniciar contenedores que no estén en estado running (Docker)
     community.docker.docker_container:
       name: "{{ item.Name }}"
