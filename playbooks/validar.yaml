@@ -40,13 +40,17 @@
           {% else %}
             none
           {% endif %}
-    - name: Mostrar gestor de contenedores limpio
-      debug:
-        msg: "El gestor de contenedores detectado es: '{{ container_manager | regex_replace('^\\s+|\\s+$', '') }}'"
+      vars:
+        container_manager_cleaned: "{{ container_manager | regex_replace('^\\s+|\\s+$', '') }}"
+      
 
-    - name: Mostrar gestor de contenedores detectado
+    - name: Limpiar gestor de contenedores
+      set_fact:
+        container_manager: "{{ container_manager | regex_replace('^\\s+|\\s+$', '') }}"
+
+    - name: Mostrar gestor de contenedores limpio final
       debug:
-        msg: "El gestor de contenedores detectado es: '{{ container_manager }}'"
+        var: container_manager
 
     - name: Validar si se encontró un gestor de contenedores
       fail:
