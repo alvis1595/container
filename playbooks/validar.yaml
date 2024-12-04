@@ -2,35 +2,20 @@
 - name: Gestionar contenedores
   hosts: all
   tasks:
-    - name: Verificar si Podman está instalado
+    - name: Verificar si Podman esta instalado
       command: which podman
       register: podman_check
       changed_when: false
       failed_when: false
+      become: true
 
-    - name: Verificar si Docker está instalado
+    - name: Verificar si Docker esta instalado
       command: which docker
       register: docker_check
       changed_when: false
       failed_when: false
 
-    - name: Mostrar resultado de la verificación de Podman
-      debug:
-        msg: "Resultado de Podman (stdout): '{{ podman_check.stdout }}'"
-
-    - name: Mostrar resultado de la verificación de Docker
-      debug:
-        msg: "Resultado de Docker (stdout): '{{ docker_check.stdout }}'"
-
-    - name: Mostrar código de retorno de Podman
-      debug:
-        msg: "Código de retorno de Podman: '{{ podman_check.rc }}'"
-
-    - name: Mostrar código de retorno de Docker
-      debug:
-        msg: "Código de retorno de Docker: '{{ docker_check.rc }}'"
-
-    - name: Establecer gestor de contenedores
+    - name: Establecer gestor limepiando las entradas
       set_fact:
         container_manager: >
           {% if podman_check.stdout | regex_replace('^\\s+|\\s+$', '') == '/usr/bin/podman' %}
@@ -43,8 +28,7 @@
       vars:
         container_manager_cleaned: "{{ container_manager | regex_replace('^\\s+|\\s+$', '') }}"
       
-
-    - name: Limpiar gestor de contenedores
+    - name: Limpiar de nuevo por si acaso el gestor
       set_fact:
         container_manager: "{{ container_manager | regex_replace('^\\s+|\\s+$', '') }}"
 
@@ -52,15 +36,16 @@
       debug:
         var: container_manager
 
-    - name: Validar si se encontró un gestor de contenedores
+    - name: Verificar si se encontro un gestor de contenedores
       fail:
-        msg: "No se encontró Podman ni Docker en este servidor."
+        msg: "No esta usando contenedores este usuario"
       when: container_manager == 'none'
 
     - name: Ejecutar rol de Podman
       include_role:
-        name: podman
+        name: crestart
       when: container_manager == 'podman'
+      become: true
 
     - name: Ejecutar rol de Docker
       include_role:
