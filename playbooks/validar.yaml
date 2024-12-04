@@ -44,7 +44,7 @@
     - name: Ejecutar rol de Podman
       include_role:
         name: crestart
-      become: true     
+      become: true
       when: container_manager == 'podman'
 
     - name: Ejecutar rol de Docker
