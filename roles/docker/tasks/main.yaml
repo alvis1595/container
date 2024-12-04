@@ -1,12 +1,16 @@
 ---
-  - name: Obtener información de contenedores detenidos
-    ansible.builtin.command: docker inspect $(docker ps -aq)
+  - name: Obtener lista de IDs de contenedores
+    ansible.builtin.command: docker ps -aq
+    register: container_ids_raw
+  
+  - name: Inspeccionar contenedores
+    ansible.builtin.command: docker inspect {{ container_ids_raw.stdout_lines | join(' ') }}
     register: docker_containers_raw
   
-  - name: Parsear datos de contenedores
+  - name: Convertir resultado de inspección en JSON
     set_fact:
       docker_containers: "{{ docker_containers_raw.stdout | from_json }}"
-  
+    
   - name: Reiniciar contenedores que no están en estado running (Docker)
     community.docker.docker_container:
       name: "{{ item.Name | regex_replace('^/', '') }}"
