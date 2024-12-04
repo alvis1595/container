@@ -42,7 +42,7 @@
       when: container_manager == 'none'
 
     - name: Ejecutar rol de Podman
-      include_role:
+      import_role:
         name: crestart
       become: true
       when: container_manager == 'podman'
