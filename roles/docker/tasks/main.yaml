@@ -1,20 +1,20 @@
 ---
   - name: Obtener lista de contenedores no ejecutándose
-    ansible.builtin.command: docker ps -a --filter "status=exited" --format '{{.Names}}'
+    ansible.builtin.command: docker ps -a --filter "status=exited" --format '{{ "{{" }}.Names{{ "}}" }}'
     register: stopped_containers
-  
+
   - name: Mostrar contenedores no ejecutándose
     debug:
       var: stopped_containers.stdout_lines
-    
+
   - name: Reiniciar contenedores detenidos
     ansible.builtin.command: docker start {{ item }}
     loop: "{{ stopped_containers.stdout_lines }}"
-    
+
   - name: Verificar estado de contenedores
     ansible.builtin.command: docker ps
     register: running_containers
-    
+
   - name: Mostrar contenedores en ejecución
     debug:
       var: running_containers.stdout_lines
