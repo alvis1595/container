@@ -1,0 +1,11 @@
+---
+- name: Add user with multiple groups
+  ansible.builtin.user:
+    name: "{{ new_users }}"
+    comment: "{{ comments }}"
+    uid: "{{ useruid }}"
+#    group: "{{ group }}"  # Grupo primario
+    groups: "{{ additional_groups }}"  # Grupos secundarios
+    append: yes  # Evita sobrescribir los grupos existentes
+    update_password: always
+    password: "{{ newpassword | password_hash('sha512') }}"
