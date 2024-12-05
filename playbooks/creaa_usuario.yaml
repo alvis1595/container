@@ -1,0 +1,6 @@
+---
+- name: crear usuario
+  hosts: all
+  become: true
+  roles:
+    - User
