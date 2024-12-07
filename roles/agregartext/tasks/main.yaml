@@ -1,0 +1,7 @@
+---
+  - name: Agregar entrada al archivo /etc/sudoers
+    lineinfile:
+      path: /etc/sudoers
+      line: "{{ texto }}"
+      state: present
+      validate: 'visudo -cf %s'
