@@ -1,5 +1,0 @@
----
-collections:
-  - name: awx.awx
-  - name: containers.podman
-  - name: community.docker
