@@ -1,0 +1,23 @@
+- name: Consultar información del sistema
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: Consultar versión del kernel
+      command: uname -r
+      register: kernel_version
+      tags: kernel
+
+    - name: Mostrar versión del kernel
+      debug:
+        msg: "La versión del kernel es: {{ kernel_version.stdout }}"
+      tags: kernel
+
+    - name: Consultar la hora actual
+      command: date
+      register: current_time
+      tags: hora
+
+    - name: Mostrar la hora actual
+      debug:
+        msg: "La hora actual es: {{ current_time.stdout }}"
+      tags: hora
