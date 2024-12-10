@@ -1,0 +1,4 @@
+- name: Ejecutar roles de forma dinámica
+  hosts: all
+  roles:
+    - name: "{{ dynamic_role }}"
