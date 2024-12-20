@@ -1,0 +1,19 @@
+---
+  - name: Transferir archivos con expect
+    ansible.builtin.expect:
+      command: "sftp -oBatchMode=no {{ username }}@{{ server }}:/casas/"
+      responses:
+        "password:": "{{ live_pass }}"
+        "sftp>": |
+          {% for file in files_to_transfer.files %}
+          put {{ file.path }}
+          {% endfor %}
+          bye
+    vars:
+      username: "awx"
+      live_pass: "1595"
+      server: "192.168.0.9"
+      files_to_transfer:
+        files:
+          - path: "/home/awx/archivo1.txt"
+          - path: "/home/awx/archivo2.txt"
