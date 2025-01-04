@@ -1,0 +1,57 @@
+---
+- name: Crear partición para LVM en {{ disk }}
+  community.general.parted:
+    device: "{{ disk }}"
+    number: 1
+    flags: [ lvm ]
+    state: present
+    part_end: "100%"
+  register: partition_result
+
+- name: Instalar lvm2
+  ansible.builtin.package:
+    name: lvm2
+    state: present
+
+- name: Crear grupo de volúmenes
+  community.general.lvg:
+    vg: "{{ vg_name }}"
+    pvs: "{{ disk }}1"
+    pesize: 16
+    state: present
+
+- name: Crear volúmenes lógicos
+  community.general.lvol:
+    vg: "{{ vg_name }}"
+    lv: "{{ item.name }}"
+    size: "{{ item.size }}"
+    force: yes
+  with_items: "{{ volumes }}"
+
+- name: Crear puntos de montaje
+  ansible.builtin.file:
+    path: "{{ item.mount_point }}"
+    state: directory
+    mode: '0755'
+  with_items: "{{ volumes }}"
+
+- name: Formatear volúmenes lógicos
+  ansible.builtin.filesystem:
+    fstype: "{{ item.fstype }}"
+    dev: "/dev/{{ vg_name }}/{{ item.name }}"
+  with_items: "{{ volumes }}"
+
+- name: Montar volúmenes lógicos
+  ansible.builtin.mount:
+    path: "{{ item.mount_point }}"
+    src: "/dev/{{ vg_name }}/{{ item.name }}"
+    fstype: "{{ item.fstype }}"
+    state: mounted
+  with_items: "{{ volumes }}"
+
+- name: Añadir entradas a /etc/fstab
+  ansible.builtin.lineinfile:
+    path: /etc/fstab
+    line: "/dev/{{ vg_name }}/{{ item.name }} {{ item.mount_point }} {{ item.fstype }} defaults 0 0"
+    state: present
+  with_items: "{{ volumes }}"
