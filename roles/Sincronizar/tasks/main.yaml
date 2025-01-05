@@ -1,0 +1,9 @@
+---
+- name: Sincronizar archivos con rsync usando contraseña
+  ansible.builtin.expect:
+    command: rsync -avz -e "ssh -o StrictHostKeyChecking=no" /jenkins_home/ {{ target_user }}@{{ target_host }}:/data2/nuevo_home/
+    responses:
+      (?i)password: "{{ target_password }}"
+  delegate_to: "{{ source_host }}"
+  become: yes
+  tags: sync
