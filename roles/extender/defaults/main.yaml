@@ -1,0 +1,7 @@
+lvm_device: "/dev/sdd"               # Disco que se va a particionar y añadir
+lvm_partition_number: 1              # Número de partición
+lvm_partition_fs: "ext4"             # Tipo de sistema de archivos de la partición
+lvm_vg_name: "tercer-vg"               # Nombre del grupo de volúmenes
+lvm_lv_name: "lv_data3"               # Nombre del volumen lógico
+lvm_extend_size: "+1G"              # Tamaño a añadir
+lvm_resize_fs: true                  # Redimensionar el sistema de archivos después de extender el LV
