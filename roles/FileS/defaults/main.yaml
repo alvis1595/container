@@ -1,0 +1,11 @@
+disk: "/dev/sdb"
+vg_name: "pruebas-vg"
+volumes:
+  - name: "lv_data1"
+    size: "1G"
+    fstype: "ext4"
+    mount_point: "/var/data1"
+  - name: "lv_data2"
+    size: "1G"
+    fstype: "xfs"
+    mount_point: "/var/data2"
