@@ -20,7 +20,6 @@
 
 - name: Añadir nuevo PV al VG (si no está añadido aún)
   command: vgextend {{ lvm_vg_name }} {{ lvm_device }}{{ lvm_partition_number }}
-  when: "'/dev/sdd1' not in pv_create_result.msg"
   
 - name: Extender volumen lógico {{ lvm_lv_name }}
   community.general.lvol:
