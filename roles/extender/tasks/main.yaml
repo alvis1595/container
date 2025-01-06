@@ -14,10 +14,10 @@
   register: partition_result
   when: device_status.stat.exists
 
-- name: Crear volumen físico en la nueva partición {{ lvm_device }}
-  community.general.lvg:
-    pvs: "{{ lvm_device }}{{ lvm_partition_number }}"
-    state: present
+#- name: Crear volumen físico en la nueva partición {{ lvm_device }}
+#  community.general.lvg:
+#    pvs: "{{ lvm_device }}{{ lvm_partition_number }}"
+#    state: present
 
 - name: Extender grupo de volúmenes {{ lvm_vg_name }}
   community.general.lvg:
