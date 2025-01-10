@@ -7,6 +7,12 @@
     mode: '0755'
   become: true
 
+- name: Crear la red devops-network
+  containers.podman.podman_network:
+    name: devops-network
+    state: present
+    driver: bridge
+
 - name: Copiar el archivo podman-compose.yml
   template:
     src: "{{ template_copy }}"
@@ -15,6 +21,7 @@
     group: awx
     mode: '0644'
   become: true
+
 
 - name: Levantar los servicios con podman-compose
   command:
