@@ -10,7 +10,7 @@ services:
       - '5022:22'
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - /jenkins_home:/var/jenkins_home:rw
+      - /jenkins_home:/var/jenkins_home:rw,z
     security_opt:
       - label:disable
     environment:
