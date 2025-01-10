@@ -5,6 +5,7 @@
     owner: awx
     group: root
     mode: '0755'
+  become: true
 
 - name: Copiar el archivo podman-compose.yml
   template:
@@ -13,6 +14,7 @@
     owner: awx
     group: awx
     mode: '0644'
+  become: true
 
 - name: Levantar los servicios con podman-compose
   command:
