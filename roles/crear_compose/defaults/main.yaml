@@ -1,0 +1,11 @@
+# Nombre del proyecto para podman-compose
+podman_project_name: pruebas_awx
+
+# Directorio donde se colocará el archivo podman-compose.yml
+podman_project_dir: /var/containers/{{ podman_project_name }}
+
+# Archivo YAML de podman-compose
+podman_compose_file: podman-compose.yml
+
+#Archvo de template a compiar
+template_copy: podman-compose.yml.j2

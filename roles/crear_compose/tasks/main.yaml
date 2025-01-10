@@ -1,0 +1,20 @@
+- name: Crear el directorio del proyecto
+  file:
+    path: "{{ podman_project_dir }}"
+    state: directory
+    owner: awx
+    group: root
+    mode: '0755'
+
+- name: Copiar el archivo podman-compose.yml
+  template:
+    src: "{{ template_copy }}"
+    dest: "{{ podman_project_dir }}/{{ podman_compose_file }}"
+    owner: awx
+    group: awx
+    mode: '0644'
+
+- name: Levantar los servicios con podman-compose
+  command:
+    cmd: podman-compose up -d
+    chdir: "{{ podman_project_dir }}"

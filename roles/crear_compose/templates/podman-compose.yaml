@@ -1,0 +1,30 @@
+services:
+  jenkins:
+    container_name: bgeneral-jenkins-lab
+    image: jenkins/jenkins:2.462.2-lts-jdk11
+    restart:  unless-stopped
+    hostname: jenkins-lab
+    ports:
+      - '5080:8080'
+      - '50002:50002'
+      - '5022:22'
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /jenkins_home:/var/jenkins_home:rw
+    security_opt:
+      - label:disable
+    environment:
+      - JENKINS_OPTS=--prefix=/jenkinslaboratorio
+      - JAVA_OPTS=-Dpermissive-script-security.enabled=true -Dpermissive-script-security.enabled=false
+      - JENKINS_HOME=/var/jenkins_home
+      - TMP=/var/jenkins_home/tmp
+      - TEMP=/var/jenkins_home/tmp
+      - TMPDIR=/var/jenkins_home/tmp
+      - JENKINS_SLAVE_AGENT_PORT=50002
+      - SET_CONTAINER_TIMEZONE=true
+      - TZ=America/Panama
+      - TERM=vt100
+
+networks:
+  devops-network:
+    external: true
